@@ -27,10 +27,12 @@ void maqEstados()
     else if (SW2)
     {
       // Incrementa
+      task_incrementa_minutos_relogio = 1;
     }
     else if (SW3)
     {
       // Decrementa
+      task_decrementa_minutos_relogio = 1;
     }
     break;
   // Ajuste hora
@@ -42,10 +44,12 @@ void maqEstados()
     else if (SW2)
     {
       // Incrementa
+      task_incrementa_horas_relogio = 1;
     }
     else if (SW3)
     {
       // Decrementa
+      task_decrementa_horas_relogio = 1;
     }
     break;
   // Ajuste minuto alarme
