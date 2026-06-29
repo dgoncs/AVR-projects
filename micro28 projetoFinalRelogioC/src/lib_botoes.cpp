@@ -2,7 +2,7 @@
 #include <lib_macros.h>
 #include <avr/io.h>
 
-volatile static uint8_t SW1, SW2, SW3;
+volatile uint8_t SW1, SW2, SW3;
 
 uint8_t leBotao(uint8_t n)
 {

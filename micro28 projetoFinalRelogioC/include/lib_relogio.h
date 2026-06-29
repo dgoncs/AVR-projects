@@ -3,10 +3,10 @@
 
 #include <stdint.h>
 
-extern volatile uint8_t task_incrementa_horas_alarme = 0;
-extern volatile uint8_t task_decrementa_horas_alarme = 0;
-extern volatile uint8_t task_incrementa_minutos_alarme = 0;
-extern volatile uint8_t task_decrementa_minutos_alarme = 0;
+extern volatile uint8_t task_incrementa_horas_alarme;
+extern volatile uint8_t task_decrementa_horas_alarme;
+extern volatile uint8_t task_incrementa_minutos_alarme;
+extern volatile uint8_t task_decrementa_minutos_alarme;
 
 void calculaHora();
 void incrementaMinutoRelogio();

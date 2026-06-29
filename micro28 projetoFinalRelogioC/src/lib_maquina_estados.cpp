@@ -1,7 +1,7 @@
 #include <lib_botoes.h>
 #include <lib_relogio.h>
 
-volatile static uint8_t estado = {0};
+volatile uint8_t estado = 0;
 
 void maqEstados()
 {

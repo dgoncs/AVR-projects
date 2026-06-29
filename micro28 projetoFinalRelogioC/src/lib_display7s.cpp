@@ -10,7 +10,7 @@ volatile uint8_t dig7a;
 volatile uint8_t dig7b;
 volatile uint8_t dig7c;
 volatile uint8_t dig7d;
-static volatile uint16_t contVarredura = 0;
+volatile uint16_t contVarredura = 0;
 
 uint8_t decod7seg[] = {
     0b00000011, // 0
