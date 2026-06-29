@@ -1,5 +1,7 @@
 #include <lib_macros.h>
 #include <lib_display7s.h>
+#include <lib_relogio.h>
+#include <lib_maquina_estados.h>
 #include <avr/interrupt.h>
 
 static volatile uint16_t contador_0 = 0;
@@ -22,7 +24,27 @@ void setup_timer_0()
 
 ISR(TIMER0_COMPA_vect)
 {
-    taskRelogio();
+    if (estado == 1)
+    {
+        taskRelogio();
+    }
+    if (estado == 2)
+    {
+        taskAjusteMinutos();
+    }
+    if (estado == 3)
+    {
+        taskAjusteHoras();
+    }
+    if (estado == 4)
+    {
+        taskAlarmeMinutos();
+    }
+    if (estado == 5)
+    {
+        taskAlarmeHoras();
+    }
+    
     taskVarreduraDisplay();
     tick_1ms = 1;
 }
