@@ -4,7 +4,6 @@
 #include <lib_maquina_estados.h>
 #include <avr/interrupt.h>
 
-static volatile uint16_t contador_0 = 0;
 volatile uint8_t tick_1ms = 0;
 
 void setup_timer_0()
@@ -24,27 +23,28 @@ void setup_timer_0()
 
 ISR(TIMER0_COMPA_vect)
 {
-    if (estado == 1)
+    switch (estado)
     {
+    case 1:
         taskRelogio();
-    }
-    if (estado == 2)
-    {
+        taskMostraRelogio();
+        break;
+    case 2:
         taskAjusteMinutos();
-    }
-    if (estado == 3)
-    {
+        break;
+    case 3:
         taskAjusteHoras();
-    }
-    if (estado == 4)
-    {
+        break;
+    case 4:
+        taskRelogio();
         taskAlarmeMinutos();
-    }
-    if (estado == 5)
-    {
+        break;
+    case 5:
+        taskRelogio();
         taskAlarmeHoras();
+        break;
     }
-    
+
     taskVarreduraDisplay();
     tick_1ms = 1;
 }

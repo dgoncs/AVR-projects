@@ -12,12 +12,8 @@ extern volatile uint8_t task_decrementa_horas_alarme;
 extern volatile uint8_t task_incrementa_minutos_alarme;
 extern volatile uint8_t task_decrementa_minutos_alarme;
 
-void calculaHora();
-void incrementaMinutoRelogio();
-void decrementaMinutoRelogio();
-void incrementaHoraRelogio();
-void decrementaHoraRelogio();
 void taskRelogio();
+void taskMostraRelogio();
 void taskAjusteMinutos();
 void taskAjusteHoras();
 void taskAlarmeMinutos();

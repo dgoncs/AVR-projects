@@ -111,3 +111,16 @@ void trocaDisplay()
         break;
     }
 }
+
+void taskVarreduraDisplay()
+{
+    if (contVarredura >= 5)
+    {
+        contVarredura = 0;
+        trocaDisplay();
+    }
+    else
+    {
+        contVarredura++;
+    }
+}
