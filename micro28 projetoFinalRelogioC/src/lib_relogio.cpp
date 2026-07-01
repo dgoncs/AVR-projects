@@ -37,6 +37,7 @@ void recalculaHora()
             {
                 hora_unidade = 0;
                 hora_dezena++;
+                return;
             }
 
             // caso especial 23 -> 00
@@ -72,15 +73,17 @@ void decrementaMinutoRelogio()
 {
     if (minuto_unidade <= 0)
     {
-        minuto_unidade = 10;
+        minuto_unidade = 9;
 
         // caso especial 00 -> 59
         if (minuto_dezena <= 0)
         {
-            minuto_dezena = 6;
+            minuto_dezena = 5;
+            return;
         }
 
         minuto_dezena--;
+        return;
     }
 
     minuto_unidade--;
@@ -94,6 +97,7 @@ void incrementaHoraRelogio()
     {
         hora_unidade = 0;
         hora_dezena++;
+        return;
     }
 
     // caso especial 23 -> 00
@@ -108,18 +112,17 @@ void decrementaHoraRelogio()
 {
     if (hora_unidade <= 0)
     {
-        hora_unidade = 10;
-
         // caso especial 00 -> 23
         if (hora_dezena <= 0)
         {
             hora_dezena = 2;
-            hora_unidade = 4;
+            hora_unidade = 3;
+            return;
         }
-        else
-        {
-            hora_dezena--;
-        }
+
+        hora_unidade = 9;
+        hora_dezena--;
+        return;
     }
 
     hora_unidade--;
@@ -146,15 +149,17 @@ void decrementaMinutoAlarme()
 {
     if (alarme_minuto_unidade <= 0)
     {
-        alarme_minuto_unidade = 10;
+        alarme_minuto_unidade = 9;
 
         // caso especial 00 -> 59
         if (alarme_minuto_dezena <= 0)
         {
-            alarme_minuto_dezena = 6;
+            alarme_minuto_dezena = 5;
+            return;
         }
 
         alarme_minuto_dezena--;
+        return;
     }
 
     alarme_minuto_unidade--;
@@ -168,6 +173,7 @@ void incrementaHoraAlarme()
     {
         alarme_hora_unidade = 0;
         alarme_hora_dezena++;
+        return;
     }
 
     // caso especial 23 -> 00
@@ -182,18 +188,17 @@ void decrementaHoraAlarme()
 {
     if (alarme_hora_unidade <= 0)
     {
-        alarme_hora_unidade = 10;
-
         // caso especial 00 -> 23
         if (alarme_hora_dezena <= 0)
         {
             alarme_hora_dezena = 2;
-            alarme_hora_unidade = 4;
+            alarme_hora_unidade = 3;
+            return;
         }
-        else
-        {
-            alarme_hora_dezena--;
-        }
+
+        alarme_hora_unidade = 9;
+        alarme_hora_dezena--;
+        return;
     }
 
     alarme_hora_unidade--;
@@ -205,11 +210,10 @@ void taskRelogio()
     {
         contRelogio = 0;
         recalculaHora();
+        return;
     }
-    else
-    {
-        contRelogio++;
-    }
+
+    contRelogio++;
 }
 
 void taskMostraRelogio()
@@ -218,6 +222,11 @@ void taskMostraRelogio()
     dig7b = hora_unidade;
     dig7c = minuto_dezena;
     dig7d = minuto_unidade;
+
+    if (contRelogio < 500)
+    {
+        dig7b = hora_unidade + 11;
+    }
 }
 
 void taskAjusteMinutos()
