@@ -219,31 +219,28 @@ void taskAlarme()
         contAlarme++;
     }
 
-    if (alarme_on >= 1)
+    if (alarme_on <= 0)
     {
-        if (SW[1] || SW[2] || SW[3])
+        if (alarme_minuto_unidade == minuto_unidade && alarme_minuto_dezena == minuto_dezena && alarme_hora_unidade == hora_unidade && alarme_hora_dezena == hora_dezena)
         {
-            alarme_on = 0;
-            // bitClear(PORTD, PD3);
-            bitClear(PORTB, PB5);
+            alarme_on = 1;
             return;
         }
 
-        if (contAlarme >= 500)
-        {
-            // bitClear(PORTD, PD3);
-            bitClear(PORTB, PB5);
-            return;
-        }
-
-        bitSet(PORTB, PB5);
+        // bitClear(PORTD, PD3);
+        bitClear(PORTB, PB5);
         return;
     }
 
-    if (alarme_minuto_unidade == minuto_unidade && alarme_minuto_dezena == minuto_dezena && alarme_hora_unidade == hora_unidade && alarme_hora_dezena == hora_dezena)
+    if (contAlarme >= 500)
     {
-        alarme_on = 1;
+        // bitClear(PORTD, PD3);
+        bitClear(PORTB, PB5);
+        return;
     }
+
+    bitSet(PORTB, PB5);
+    return;
 }
 
 void taskRelogio()

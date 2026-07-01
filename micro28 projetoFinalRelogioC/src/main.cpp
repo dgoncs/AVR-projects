@@ -8,8 +8,8 @@
 void setup()
 {
   bitSet(DDRB, PB5);
+  bitSet(PORTB, PB5);
   setup_display7seg();
-  apagaTodosDigitos();
   setup_timer_0();
 }
 

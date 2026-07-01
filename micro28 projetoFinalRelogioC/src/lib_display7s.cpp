@@ -53,13 +53,6 @@ uint8_t decod7segComPonto[] = {
 
 uint8_t displays[] = {0b10000000, 0b01000000, 0b00100000, 0b00010000};
 
-void setup_display7seg()
-{
-    bitSet(DDRB, SDI);
-    bitSet(DDRD, SCLK);
-    bitSet(DDRD, SLC);
-}
-
 void display7segWrite(uint8_t b1, uint8_t b2)
 {
     for (uint8_t i = 0; i < 8; i++)
@@ -96,6 +89,15 @@ void apagaTodosDigitos()
     {
         display7segWrite(decod7seg[16], displays[i]);
     }
+}
+
+void setup_display7seg()
+{
+    bitSet(DDRB, SDI);
+    bitSet(DDRD, SCLK);
+    bitSet(DDRD, SLC);
+
+    apagaTodosDigitos();
 }
 
 void trocaDisplay()

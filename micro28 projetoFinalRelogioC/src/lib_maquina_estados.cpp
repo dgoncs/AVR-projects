@@ -6,7 +6,14 @@ volatile uint8_t estado = 0;
 void maqEstados()
 {
   if (alarme_on >= 1)
+  {
+    if (SW[1] || SW[2] || SW[3])
+    {
+      alarme_on = 0;
+    }
+
     return;
+  }
 
   switch (estado)
   {
