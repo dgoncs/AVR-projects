@@ -2,7 +2,7 @@
 #include <lib_macros.h>
 #include <avr/io.h>
 
-volatile uint8_t SW1, SW2, SW3;
+volatile uint8_t SW[4] = {0, 0, 0, 0};
 
 uint8_t leBotao(uint8_t n)
 {
@@ -41,18 +41,10 @@ uint8_t leBotao(uint8_t n)
   return estadoBotao;
 }
 
-void varreduraBotao()
+void varreduraBotoes()
 {
-  if (leBotao(1) == 1)
+  for (uint8_t i = 1; i <= 3; i++)
   {
-    // Troca de modo / selecao
-  }
-  if (leBotao(2) == 1)
-  {
-    // Incrementar
-  }
-  if (leBotao(3) == 1)
-  {
-    // Decrementar
+    SW[i] = leBotao(i);
   }
 }

@@ -3,8 +3,8 @@
 
 #include <stdint.h>
 
-extern volatile uint8_t SW1, SW2, SW3;
+extern volatile uint8_t SW[4];
 
-uint8_t leBotao(uint8_t n);
+void varreduraBotoes();
 
 #endif

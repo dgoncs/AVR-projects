@@ -1,11 +1,13 @@
-#include <lib_timer.h>
-#include <lib_macros.h>
-#include <lib_display7s.h>
-#include <lib_maquina_estados.h>
 #include <avr/io.h>
+#include <lib_botoes.h>
+#include <lib_display7s.h>
+#include <lib_macros.h>
+#include <lib_maquina_estados.h>
+#include <lib_timer.h>
 
 void setup()
 {
+  bitSet(DDRB, PB5);
   setup_display7seg();
   apagaTodosDigitos();
   setup_timer_0();
@@ -16,6 +18,7 @@ int main()
   setup();
   while (1)
   {
+    varreduraBotoes();
     maqEstados();
     if (tick_1ms)
     {
