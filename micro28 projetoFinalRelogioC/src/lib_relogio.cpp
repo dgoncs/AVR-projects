@@ -22,49 +22,49 @@ volatile uint8_t task_decrementa_minutos_alarme = 0;
 void recalculaHora()
 {
     minuto_unidade++;
-    if (minuto_unidade > 9)
+
+    if (minuto_unidade >= 10)
     {
         minuto_unidade = 0;
         minuto_dezena++;
-    }
-    if (minuto_dezena > 5)
-    {
-        minuto_dezena = 0;
-        hora_unidade++;
-    }
-    if (hora_unidade > 9)
-    {
-        hora_unidade = 0;
-        hora_dezena++;
-    }
-    if (hora_dezena > 23)
-    {
-        minuto_unidade = 0;
-        minuto_dezena = 0;
-        hora_unidade = 0;
-        hora_dezena = 0;
+
+        if (minuto_dezena >= 6)
+        {
+            minuto_dezena = 0;
+            hora_unidade++;
+
+            if (hora_unidade >= 10)
+            {
+                hora_unidade = 0;
+                hora_dezena++;
+            }
+
+            // caso especial 23 -> 00
+            else if (hora_dezena >= 2 && hora_unidade >= 4)
+            {
+                minuto_unidade = 0;
+                minuto_dezena = 0;
+                hora_unidade = 0;
+                hora_dezena = 0;
+            }
+        }
     }
 }
 
 void incrementaMinutoRelogio()
 {
-    if (minuto_unidade >= 9)
+    minuto_unidade++;
+
+    if (minuto_unidade >= 10)
     {
         minuto_unidade = 0;
+        minuto_dezena++;
 
         // caso especial 59 -> 00
-        if (minuto_dezena >= 5)
+        if (minuto_dezena >= 6)
         {
             minuto_dezena = 0;
         }
-        else
-        {
-            minuto_dezena++;
-        }
-    }
-    else
-    {
-        minuto_unidade++;
     }
 }
 
@@ -72,83 +72,73 @@ void decrementaMinutoRelogio()
 {
     if (minuto_unidade <= 0)
     {
-        minuto_unidade = 9;
+        minuto_unidade = 10;
 
         // caso especial 00 -> 59
         if (minuto_dezena <= 0)
         {
-            minuto_dezena = 5;
+            minuto_dezena = 6;
         }
-        else
-        {
-            minuto_dezena--;
-        }
+
+        minuto_dezena--;
     }
-    else
-    {
-        minuto_unidade--;
-    }
+
+    minuto_unidade--;
 }
 
 void incrementaHoraRelogio()
 {
-    // caso especial 23 -> 00
-    if (hora_dezena >= 2 && hora_unidade >= 3)
-    {
-        hora_unidade = 0;
-        hora_dezena = 0;
-    }
-    else if (hora_unidade >= 9)
+    hora_unidade++;
+
+    if (hora_unidade >= 10)
     {
         hora_unidade = 0;
         hora_dezena++;
     }
-    else
+
+    // caso especial 23 -> 00
+    if (hora_dezena >= 2 && hora_unidade >= 4)
     {
-        hora_unidade++;
+        hora_unidade = 0;
+        hora_dezena = 0;
     }
 }
 
 void decrementaHoraRelogio()
 {
-    if (minuto_unidade <= 0)
+    if (hora_unidade <= 0)
     {
-        minuto_unidade = 9;
+        hora_unidade = 10;
 
-        if (minuto_dezena <= 0)
+        // caso especial 00 -> 23
+        if (hora_dezena <= 0)
         {
-            minuto_dezena = 5;
+            hora_dezena = 2;
+            hora_unidade = 4;
         }
         else
         {
-            minuto_dezena--;
+            hora_dezena--;
         }
     }
-    else
-    {
-        minuto_unidade--;
-    }
+
+    hora_unidade--;
 }
 
 void incrementaMinutoAlarme()
 {
-    if (alarme_minuto_unidade >= 9)
+    alarme_minuto_unidade++;
+
+    if (alarme_minuto_unidade >= 10)
     {
         alarme_minuto_unidade = 0;
+        alarme_minuto_dezena++;
 
         // caso especial 59 -> 00
-        if (alarme_minuto_dezena >= 5)
+        if (alarme_minuto_dezena >= 6)
         {
             alarme_minuto_dezena = 0;
         }
-        else
-        {
-            alarme_minuto_dezena++;
-        }
-    }
-    else
-    {
-        alarme_minuto_unidade++;
     }
 }
 
@@ -156,40 +146,35 @@ void decrementaMinutoAlarme()
 {
     if (alarme_minuto_unidade <= 0)
     {
-        alarme_minuto_unidade = 9;
+        alarme_minuto_unidade = 10;
 
         // caso especial 00 -> 59
         if (alarme_minuto_dezena <= 0)
         {
-            alarme_minuto_dezena = 5;
+            alarme_minuto_dezena = 6;
         }
-        else
-        {
-            alarme_minuto_dezena--;
-        }
+
+        alarme_minuto_dezena--;
     }
-    else
-    {
-        alarme_minuto_unidade--;
-    }
+
+    alarme_minuto_unidade--;
 }
 
 void incrementaHoraAlarme()
 {
-    // caso especial 23 -> 00
-    if (alarme_hora_dezena >= 2 && alarme_hora_unidade >= 3)
-    {
-        alarme_hora_unidade = 0;
-        alarme_hora_dezena = 0;
-    }
-    else if (alarme_hora_unidade >= 9)
+    alarme_hora_unidade++;
+
+    if (alarme_hora_unidade >= 10)
     {
         alarme_hora_unidade = 0;
         alarme_hora_dezena++;
     }
-    else
+
+    // caso especial 23 -> 00
+    if (alarme_hora_dezena >= 2 && alarme_hora_unidade >= 4)
     {
-        alarme_hora_unidade++;
+        alarme_hora_unidade = 0;
+        alarme_hora_dezena = 0;
     }
 }
 
@@ -197,21 +182,21 @@ void decrementaHoraAlarme()
 {
     if (alarme_hora_unidade <= 0)
     {
-        alarme_hora_unidade = 9;
+        alarme_hora_unidade = 10;
 
+        // caso especial 00 -> 23
         if (alarme_hora_dezena <= 0)
         {
-            alarme_hora_dezena = 5;
+            alarme_hora_dezena = 2;
+            alarme_hora_unidade = 4;
         }
         else
         {
             alarme_hora_dezena--;
         }
     }
-    else
-    {
-        alarme_hora_unidade--;
-    }
+
+    alarme_hora_unidade--;
 }
 
 void taskRelogio()
@@ -237,14 +222,14 @@ void taskMostraRelogio()
 
 void taskAjusteMinutos()
 {
-    if (task_decrementa_minutos_alarme >= 1)
+    if (task_decrementa_minutos_relogio >= 1)
     {
-        task_decrementa_minutos_alarme = 0;
+        task_decrementa_minutos_relogio = 0;
         decrementaMinutoRelogio();
     }
-    if (task_incrementa_minutos_alarme >= 1)
+    if (task_incrementa_minutos_relogio >= 1)
     {
-        task_incrementa_minutos_alarme = 0;
+        task_incrementa_minutos_relogio = 0;
         incrementaMinutoRelogio();
     }
 
@@ -275,14 +260,14 @@ void taskAjusteMinutos()
 
 void taskAjusteHoras()
 {
-    if (task_decrementa_horas_alarme >= 1)
+    if (task_decrementa_horas_relogio >= 1)
     {
-        task_decrementa_horas_alarme = 0;
+        task_decrementa_horas_relogio = 0;
         decrementaHoraRelogio();
     }
-    if (task_incrementa_horas_alarme >= 1)
+    if (task_incrementa_horas_relogio >= 1)
     {
-        task_incrementa_horas_alarme = 0;
+        task_incrementa_horas_relogio = 0;
         incrementaHoraRelogio();
     }
 
