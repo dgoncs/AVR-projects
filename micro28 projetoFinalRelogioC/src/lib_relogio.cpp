@@ -1,4 +1,7 @@
 #include <lib_display7s.h>
+#include <lib_macros.h>
+#include <avr/io.h>
+#include <lib_botoes.h>
 
 static volatile uint16_t contRelogio = 0;
 static volatile uint16_t contAlarme = 0;
@@ -8,8 +11,9 @@ static volatile uint8_t hora_unidade = 0;
 static volatile uint8_t hora_dezena = 0;
 static volatile uint8_t alarme_minuto_unidade = 0;
 static volatile uint8_t alarme_minuto_dezena = 0;
-static volatile uint8_t alarme_hora_unidade = 0;
-static volatile uint8_t alarme_hora_dezena = 0;
+static volatile uint8_t alarme_hora_unidade = 2;
+static volatile uint8_t alarme_hora_dezena = 1;
+static volatile uint8_t alarme_on = 0;
 volatile uint8_t task_incrementa_horas_relogio = 0;
 volatile uint8_t task_decrementa_horas_relogio = 0;
 volatile uint8_t task_incrementa_minutos_relogio = 0;
@@ -41,7 +45,7 @@ void recalculaHora()
             }
 
             // caso especial 23 -> 00
-            else if (hora_dezena >= 2 && hora_unidade >= 4)
+            if (hora_dezena >= 2 && hora_unidade >= 4)
             {
                 minuto_unidade = 0;
                 minuto_dezena = 0;
@@ -204,6 +208,44 @@ void decrementaHoraAlarme()
     alarme_hora_unidade--;
 }
 
+void taskAlarme()
+{
+    if (contAlarme >= 999)
+    {
+        contAlarme = 0;
+    }
+    else
+    {
+        contAlarme++;
+    }
+
+    if (alarme_on >= 1)
+    {
+        if (SW[1] || SW[2] || SW[3])
+        {
+            alarme_on = 0;
+            // bitClear(PORTD, PD3);
+            bitClear(PORTB, PB5);
+            return;
+        }
+
+        if (contAlarme >= 500)
+        {
+            // bitClear(PORTD, PD3);
+            bitClear(PORTB, PB5);
+            return;
+        }
+
+        bitSet(PORTB, PB5);
+        return;
+    }
+
+    if (alarme_minuto_unidade == minuto_unidade && alarme_minuto_dezena == minuto_dezena && alarme_hora_unidade == hora_unidade && alarme_hora_dezena == hora_dezena)
+    {
+        alarme_on = 1;
+    }
+}
+
 void taskRelogio()
 {
     if (contRelogio >= 999)
@@ -219,14 +261,16 @@ void taskRelogio()
 void taskMostraRelogio()
 {
     dig7a = hora_dezena;
-    dig7b = hora_unidade;
     dig7c = minuto_dezena;
     dig7d = minuto_unidade;
 
-    if (contRelogio < 500)
+    if (contRelogio >= 500)
     {
         dig7b = hora_unidade + 11;
+        return;
     }
+
+    dig7b = hora_unidade;
 }
 
 void taskAjusteMinutos()
@@ -242,17 +286,16 @@ void taskAjusteMinutos()
         incrementaMinutoRelogio();
     }
 
+    dig7a = hora_dezena;
+    dig7b = hora_unidade;
+
     if (contRelogio >= 500)
     {
-        dig7a = hora_dezena;
-        dig7b = hora_unidade;
         dig7c = 10;
         dig7d = 10;
     }
     else
     {
-        dig7a = hora_dezena;
-        dig7b = hora_unidade;
         dig7c = minuto_dezena;
         dig7d = minuto_unidade;
     }
@@ -260,11 +303,10 @@ void taskAjusteMinutos()
     if (contRelogio >= 999)
     {
         contRelogio = 0;
+        return;
     }
-    else
-    {
-        contRelogio++;
-    }
+
+    contRelogio++;
 }
 
 void taskAjusteHoras()
@@ -284,25 +326,23 @@ void taskAjusteHoras()
     {
         dig7a = 10;
         dig7b = 10;
-        dig7c = minuto_dezena;
-        dig7d = minuto_unidade;
     }
     else
     {
         dig7a = hora_dezena;
         dig7b = hora_unidade;
-        dig7c = minuto_dezena;
-        dig7d = minuto_unidade;
     }
+
+    dig7c = minuto_dezena;
+    dig7d = minuto_unidade;
 
     if (contRelogio >= 999)
     {
         contRelogio = 0;
+        return;
     }
-    else
-    {
-        contRelogio++;
-    }
+
+    contRelogio++;
 }
 
 void taskAlarmeMinutos()
@@ -318,17 +358,16 @@ void taskAlarmeMinutos()
         incrementaMinutoAlarme();
     }
 
+    dig7a = alarme_hora_dezena;
+    dig7b = alarme_hora_unidade + 11;
+
     if (contAlarme >= 500)
     {
-        dig7a = alarme_hora_dezena;
-        dig7b = alarme_hora_unidade;
         dig7c = 10;
         dig7d = 10;
     }
     else
     {
-        dig7a = alarme_hora_dezena;
-        dig7b = alarme_hora_unidade;
         dig7c = alarme_minuto_dezena;
         dig7d = alarme_minuto_unidade;
     }
@@ -336,11 +375,10 @@ void taskAlarmeMinutos()
     if (contAlarme >= 999)
     {
         contAlarme = 0;
+        return;
     }
-    else
-    {
-        contAlarme++;
-    }
+
+    contAlarme++;
 }
 
 void taskAlarmeHoras()
@@ -359,24 +397,22 @@ void taskAlarmeHoras()
     if (contAlarme >= 500)
     {
         dig7a = 10;
-        dig7b = 10;
-        dig7c = alarme_minuto_dezena;
-        dig7d = alarme_minuto_unidade;
+        dig7b = 21;
     }
     else
     {
         dig7a = alarme_hora_dezena;
-        dig7b = alarme_hora_unidade;
-        dig7c = alarme_minuto_dezena;
-        dig7d = alarme_minuto_unidade;
+        dig7b = alarme_hora_unidade + 11;
     }
+
+    dig7c = alarme_minuto_dezena;
+    dig7d = alarme_minuto_unidade;
 
     if (contAlarme >= 999)
     {
         contAlarme = 0;
+        return;
     }
-    else
-    {
-        contAlarme++;
-    }
+
+    contAlarme++;
 }

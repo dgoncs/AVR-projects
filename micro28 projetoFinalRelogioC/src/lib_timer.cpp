@@ -27,12 +27,15 @@ ISR(TIMER0_COMPA_vect)
     {
     case 1:
         taskRelogio();
+        taskAlarme();
         taskMostraRelogio();
         break;
     case 2:
+        taskAlarme();
         taskAjusteMinutos();
         break;
     case 3:
+        taskAlarme();
         taskAjusteHoras();
         break;
     case 4:

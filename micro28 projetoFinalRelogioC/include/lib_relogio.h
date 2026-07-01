@@ -12,6 +12,7 @@ extern volatile uint8_t task_decrementa_horas_alarme;
 extern volatile uint8_t task_incrementa_minutos_alarme;
 extern volatile uint8_t task_decrementa_minutos_alarme;
 
+void taskAlarme();
 void taskRelogio();
 void taskMostraRelogio();
 void taskAjusteMinutos();
