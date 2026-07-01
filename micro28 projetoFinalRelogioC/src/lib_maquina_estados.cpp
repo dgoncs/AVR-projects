@@ -5,6 +5,9 @@ volatile uint8_t estado = 0;
 
 void maqEstados()
 {
+  if (alarme_on >= 1)
+    return;
+
   switch (estado)
   {
   // Normal
